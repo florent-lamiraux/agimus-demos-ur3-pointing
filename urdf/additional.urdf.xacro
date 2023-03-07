@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro"
-       name="ur10_pointing_additional" >
+       name="ur3_pointing_additional" >
   <xacro:macro name="environment">
    <link name="wall_link">
      <collision>

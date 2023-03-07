@@ -74,14 +74,14 @@ class TooltipCalibration(Plugin):
         "from pinocchio import SE3",
         "from dynamic_graph import get_entity_list",
         "tc_entities = get_entity_list()",
-        "tc_f = FeaturePose('pregrasp___ur10e/gripper___part/handle_0_feature')",
+        "tc_f = FeaturePose('pregrasp___ur5e/gripper___part/handle_0_feature')",
         "print(tc_entities)"]
     outputFile = None
     cameraFrame = 'ref_camera_link'
     objectFrame = 'part/base_link'
     objectFrameMeas = 'part/base_link_measured'
-    endEffectorFrame = 'ur10e_d435_mount_link'
-    tooltipFrame = 'ur10e_tooltip_link'
+    endEffectorFrame = 'ur5e_d435_mount_link'
+    tooltipFrame = 'ur5e_tooltip_link'
     objectName = 'part'
 
     def __init__(self, context):

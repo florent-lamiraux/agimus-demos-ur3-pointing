@@ -103,7 +103,7 @@ class TooltipCalibration(object):
             s += m['cMo'].act(self.oh)
         ch = s/len(self.measurements)
         # There is an intermediate frame called ref_camera_link
-        # between ur10e_d435_mount_link and the camera optical frame
+        # between ur5e_d435_mount_link and the camera optical frame
         # camera_color_optical_frame. Let us denote by i for this frame
         # eMc = eMi * iMc
         # iMc is provided by the camera manufacturer. We need to compute
@@ -123,7 +123,7 @@ class TooltipCalibration(object):
         rpy = matrixToRpy(self.eMi.rotation)
         xyz = self.eMi.translation
         print(f"""    <joint name="ref_camera_joint" type="fixed">
-     <parent link="ur10e_d435_mount_link" />
+     <parent link="ur5e_d435_mount_link" />
      <child link = "ref_camera_link" />
      <origin xyz="{xyz[0]} {xyz[1]} {xyz[2]}"
 	     rpy="{rpy[0]} {rpy[1]} {rpy[2]}"/>

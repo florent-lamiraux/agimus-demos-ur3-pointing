@@ -1,0 +1,19 @@
+demo:
+  robots:
+    ur3e:
+      srdf:
+        package: agimus_demos
+        file: srdf/ur3_robot.srdf
+  objects:
+    part:
+      class_name: AprilTagPlank
+      urdf:
+        package: agimus_demos
+        file: /urdf/april-tag-plank.urdf
+      srdf:
+        package: agimus_demos
+        file: srdf/april-tag-plank.srdf
+      contacts:
+        []
+  grippers:
+    [ur3e/gripper,]

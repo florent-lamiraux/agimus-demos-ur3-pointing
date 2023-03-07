@@ -63,7 +63,7 @@ def isYes(res):
     return False
 
 class PathGenerator(object):
-    gripper = 'ur10e/gripper'
+    gripper = 'ur5e/gripper'
     ros = True
     def __init__(self, ps, graph, ri=None, v=None, qref=None):
         self.ps = ps
@@ -110,7 +110,7 @@ class PathGenerator(object):
             self.pcl.removeObjectPlan()
         print("Getting point cloud ... (timeout is {})".format(timeout))
         result = self.pcl.buildPointCloud('part/base_link', '/camera/depth/color/points',
-                        'ur10e/camera_depth_optical_frame', res,
+                        'ur5e/camera_depth_optical_frame', res,
                         qi, timeout, newPointCloud)
         if result:
             self.graph.initialize()
@@ -138,7 +138,7 @@ class PathGenerator(object):
     # (useful if the robot fails in a grasp position)
     def createBackwardConstraint(self):
         self.ps.client.basic.problem.resetConstraints()
-        self.ps.client.basic.problem.createTransformationR3xSO3Constraint('behind-failure', '', 'ur10e/wrist_3_link',
+        self.ps.client.basic.problem.createTransformationR3xSO3Constraint('behind-failure', '', 'ur5e/wrist_3_link',
                                         [0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 0, 1],
                                         [True, True, True, True, True, True,])
         self.ps.setConstantRightHandSide('behind-failure', False)
@@ -161,7 +161,7 @@ class PathGenerator(object):
         self.ps.addNumericalConstraints('config-projector', ['part-fixed'])
         self.ps.client.basic.problem.createTransformationR3xSO3Constraint(
                             'look-at-hole-'+str(hole_id),
-                            'ur10e/ref_camera_link',
+                            'ur5e/ref_camera_link',
                             'part/hole_' + str(hole_id).zfill(2) + '_link',
                             [distance, 0, 0, 0.5, -0.5, -0.5, 0.5], [0, 0, 0, 0, 0, 0, 1],
                             [True, True, True, True, True, True,])
@@ -469,7 +469,7 @@ class PathGenerator(object):
     def isHoleDoable(self, hole_id, qinit=None):
         if self.graphValidation is None:
             raise RuntimeError("You should validate the graph first")
-        coll = self.graphValidation.getCollisionsForNode("ur10e/gripper grasps part/handle_"+str(hole_id))
+        coll = self.graphValidation.getCollisionsForNode("ur5e/gripper grasps part/handle_"+str(hole_id))
         if len(coll) == 0:
             qinit = self.checkQInit(qinit)
             handle = 'part/handle_'+str(hole_id).zfill(2)
@@ -517,7 +517,7 @@ class PathGenerator(object):
     def planBackwardsAfterFailure(self, qinit=None, distance=0.1):
         qinit = self.checkQInit(qinit)
         # Get current transform of wrist
-        t = self.robot.getCurrentTransformation('ur10e/wrist_3_joint')
+        t = self.robot.getCurrentTransformation('ur5e/wrist_3_joint')
         trans = [t[i][3] for i in range(3)]
         rot_matrix = [t[i][:3] for i in range(3)]
         quat = list(R.from_matrix(rot_matrix).as_quat())
