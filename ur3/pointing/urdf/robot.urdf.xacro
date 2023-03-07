@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3e" >
 
+  <material name="white02">
+    <color rgba="1 1 1 0.2"/>
+  </material>
+
   <!-- parameters -->
   <xacro:arg name="gazebo" default="false"
              doc="whether robot is loaded in gazebo simulator"/>
@@ -57,34 +61,120 @@
     <link name="support_link">
       <inertial>
         <mass value="200"/>
-        <origin xyz="0 0 0.45"/>
+	<origin xyz="0 0 0.44"/>
         <inertia ixx="50"  ixy="0"  ixz="0" iyy="50" iyz="0" izz="50" />
       </inertial>
+      <!-- table -->
       <visual>
-        <origin xyz="-0.45 0.0 0.44"/>
+	
+	<origin xyz="0.0 -0.305 0.5"/>
         <geometry>
-	        <box size="1.15 0.75 0.855"/>
+	        <box size="0.80 1 1"/>
         </geometry>
       </visual>
       <collision>
-        <origin xyz="-0.45 0.0 0.44"/>
+        <origin xyz="0.0 -0.305 0.5"/>
         <geometry>
-	        <box size="1.15 0.75 0.855"/>
+	        <box size="0.80 1 1"/>
         </geometry>
       </collision>
+      <!-- support -->
      <visual>
-       <origin xyz="0 0 0.875"/>
+       <origin xyz="0 0 1.01"/>
        <geometry>
-	        <box size="0.15 0.21 0.02"/>
+	        <box size="0.16 0.16 0.02"/>
        </geometry>
      </visual>
      <collision>
-       <origin xyz="0 0 0.875"/>
+       <origin xyz="0 0 1.01"/>
        <geometry>
-	        <box size="0.15 0.21 0.02"/>
+	        <box size="0.16 0.16 0.02"/>
+       </geometry>
+     </collision>     
+    </link>
+
+    <link name="walls">
+     <!-- front wall -->
+     <visual>
+	<origin xyz="0.385 -0.305 0.37"/>
+        <geometry>
+	  <box size="0.03 1 0.74"/>
+        </geometry>
+	<material name="white02"/>
+     </visual>
+      <collision>
+       <origin xyz="0.385 -0.305 0.37"/>
+       <geometry>
+	 <box size="0.03 1 0.74"/>
+       </geometry>
+      </collision>
+      
+      <!-- behind wall -->
+     <visual>
+	<origin xyz="-0.385 -0.305 0.37"/>
+        <geometry>
+	  <box size="0.03 1 0.74"/>
+        </geometry>
+	<material name="white02"/>
+     </visual>
+      <collision>
+       <origin xyz="-0.385 -0.305 0.37"/>
+       <geometry>
+	 <box size="0.03 1 0.74"/>
+       </geometry>
+      </collision>
+
+      <!-- left wall -->
+     <visual>
+	<origin xyz="0 -0.79 0.37"/>
+        <geometry>
+	  <box size="0.74 0.03 0.74"/>
+        </geometry>
+	<material name="white02"/>
+     </visual>
+      <collision>
+       <origin xyz="0 -0.79 0.37"/>
+       <geometry>
+	 <box size="0.74 0.03 0.74"/>
+       </geometry>
+      </collision>
+
+     <!-- right wall -->
+     <visual>
+	<origin xyz="0 0.185 0.37"/>
+        <geometry>
+	  <box size="0.74 0.03 0.74"/>
+        </geometry>
+	<material name="white02"/>
+     </visual>
+      <collision>
+       <origin xyz="0 0.185 0.37"/>
+       <geometry>
+	 <box size="0.74 0.03 0.74"/>
+       </geometry>
+      </collision>
+
+      <!-- above wall -->
+     <visual>
+	<origin xyz="0 -0.305 0.755"/>
+        <geometry>
+	  <box size="0.80 1 0.03"/>
+        </geometry>
+	<material name="white02"/>
+     </visual>
+      <collision>
+       <origin xyz="0 -0.305 0.75"/>
+       <geometry>
+	 <box size="0.80 1 0.03"/>
        </geometry>
      </collision>
-    </link>
+    </link>  
+
+    <joint name="walls_joint" type="fixed">
+     <parent link="support_link" />
+     <child link = "walls" />
+      <origin xyz="0.0 0.0 1" rpy="0.0 0.0 0" />
+   </joint>
 
    <joint name="support_joint" type="fixed">
      <parent link="world" />
@@ -95,7 +185,7 @@
    <joint name="robot_joint" type="fixed">
      <parent link="support_link" />
      <child link = "base_link" />
-      <origin xyz="0.0 0.0 0.885" rpy="0.0 0.0 -1.5707963" />
+      <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
    </joint>
 
    <link name="collision_cylinder">
