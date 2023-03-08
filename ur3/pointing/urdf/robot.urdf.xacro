@@ -64,9 +64,9 @@
 	<origin xyz="0 0 0.44"/>
         <inertia ixx="50"  ixy="0"  ixz="0" iyy="50" iyz="0" izz="50" />
       </inertial>
+      
       <!-- table -->
       <visual>
-	
 	<origin xyz="0.0 -0.305 0.5"/>
         <geometry>
 	        <box size="0.80 1 1"/>
@@ -78,6 +78,7 @@
 	        <box size="0.80 1 1"/>
         </geometry>
       </collision>
+      
       <!-- support -->
      <visual>
        <origin xyz="0 0 1.01"/>
@@ -93,7 +94,8 @@
      </collision>     
     </link>
 
-    <link name="walls">
+     <link name="walls">
+      
      <!-- front wall -->
      <visual>
 	<origin xyz="0.385 -0.305 0.37"/>
@@ -168,9 +170,10 @@
 	 <box size="0.80 1 0.03"/>
        </geometry>
      </collision>
-    </link>  
+    </link> 
 
-    <joint name="walls_joint" type="fixed">
+
+<joint name="walls_joint" type="fixed">
      <parent link="support_link" />
      <child link = "walls" />
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 0" />
@@ -181,7 +184,8 @@
      <child link = "support_link" />
      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
    </joint>
-
+  
+   
    <joint name="robot_joint" type="fixed">
      <parent link="support_link" />
      <child link = "base_link" />
@@ -189,6 +193,12 @@
    </joint>
 
    <link name="collision_cylinder">
+     <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+       <geometry>
+	 <cylinder radius="0.045" length="0.115"/>
+       </geometry>
+     </visual>
      <collision>
        <origin xyz="0 0 0" rpy="0 0 0"/>
        <geometry>
@@ -203,120 +213,12 @@
      <origin xyz="0.0 0.0 0.05" rpy="0.0 0.0 ${pi/2.0}" />
    </joint>
 
-   <joint name="ee_fixed_joint" type="fixed">
-     <parent link="wrist_3_link" />
-     <child link = "ee_link" />
-     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2.0}" />
-   </joint>
-
-   <link name="ee_link">
-     <!-- <collision>
-       <geometry>
-         <box size="0.01 0.01 0.01"/>
-       </geometry>
-       <origin rpy="0 0 0" xyz="-0.01 0 0"/>
-     </collision>
-     <visual>
-       <geometry>
-         <box size="0.01 0.01 0.01"/>
-       </geometry>
-       <origin rpy="0 0 0" xyz="-0.01 0 0"/>
-     </visual> -->
-   </link>
-
-   <link name="ur3e_d435_mount_link">
-     <inertial>
-       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-       <mass value="0.1"/>
-       <inertia ixx="0.001" ixy="0.0" ixz="0.0"
-         iyy="0.001" iyz="0.0"
-         izz="0.001" />
-     </inertial>
-     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-       <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_d435_mount.stl"/>
-       </geometry>
-       <material name="Red">
-         <color rgba="0.9 0.1 0.1 1.0"/>
-       </material>
-     </visual>
-     <collision>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-       <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_d435_mount.stl"/>
-       </geometry>
-     </collision>
-   </link>
-
-   <joint name="ur3e_d435_mount_joint" type="fixed">
-     <parent link="wrist_3_link"/>
-     <child link="ur3e_d435_mount_link" />
-     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 3.14159265359" />
-   </joint>
-
-   <link name="ur3e_tool_link">
-     <inertial>
-       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-       <mass value="0.1"/>
-       <inertia ixx="0.001" ixy="0.0" ixz="0.0"
-         iyy="0.001" iyz="0.0"
-         izz="0.001" />
-     </inertial>
-     <!-- Tool support -->
-     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-       <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_tip.stl"/>
-       </geometry>
-       <material name="Red">
-         <color rgba="0.9 0.1 0.1 1.0"/>
-       </material>
-     </visual>
-     <collision>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-       <geometry>
-         <mesh filename="package://agimus_demos/ur3/pointing/meshes/ur3e_tip.stl"/>
-       </geometry>
-     </collision>
-     <!-- wooden spike -->
-     <visual>
-       <origin xyz="0 0 0.113" rpy="0 0 0" />
-       <geometry>
-	 <cylinder radius="0.0015" length="0.25"/>
-       </geometry>
-       <material name="Pine">
-	 <color rgba="0.8 0.65 0.4 1.0"/>
-       </material>
-     </visual>
-     <collision>
-       <origin xyz="0 0 0.113" rpy="0 0 0" />
-       <geometry>
-	 <cylinder radius="0.0015" length="0.25"/>
-       </geometry>
-     </collision>
-   </link>
-
-   <joint name="ur3e_tool_joint" type="fixed">
-     <parent link="ur3e_d435_mount_link"/>
-     <child link="ur3e_tool_link" />
-     <origin xyz="$(arg tip_offset_x) $(arg tip_offset_y) 0.0" rpy="0.0 0.0 0.0" />
-   </joint>
-
-   <link name="ur3e_tooltip_link">
-   </link>
-
-  <joint name="ur3e_tooltip_joint" type="fixed">
-     <parent link="ur3e_tool_link" />
-     <child link = "ur3e_tooltip_link" />
-     <origin xyz="0.0 0.0 ${0.25 + $(arg tip_offset_z)}" rpy="0.0 0.0 0.0" />
-  </joint>
 
    <link name="ref_camera_link">
    </link>
 
     <joint name="ref_camera_joint" type="fixed">
-     <parent link="ur3e_d435_mount_link" />
+     <parent link="wrist_3_link" />
      <child link = "ref_camera_link" />
      <origin xyz="${camera_pose['camera']['x']}
                   ${camera_pose['camera']['y']}
