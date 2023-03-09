@@ -41,20 +41,23 @@ INSTALL(FILES
   supervisor.py
   demo-plaque-tubes-with-table.yaml
   demo-april-tag-plank.yaml
+  demo-kapla.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
   )
 
 INSTALL(FILES
   urdf/plaque-tubes-with-table.urdf
   urdf/pokeball.urdf
+  urdf/kapla.urdf
   urdf/robot.urdf.xacro
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/urdf
   )
 
 INSTALL(FILES
   srdf/plaque-tubes.srdf
   srdf/plaque-tubes.py
   srdf/pokeball.srdf
+  srdf/kapla.srdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
   )
 

@@ -16,8 +16,11 @@
   <arg name="paused" default="false" doc="Starts gazebo in paused mode" />
   <arg name="gui" default="true" doc="Starts gazebo gui" />
   <arg name="debug" default="false"/>
-  <arg name="part" default="plaque-tubes-with-table"/>
-  <arg name="part_pose" default="-x 1.6 -y 0 -z 0 -Y -1.57079632679"/>
+  <!--arg name="part" default="plaque-tubes-with-table"/-->
+  <!--arg name="part_pose" default="-x 1.6 -y 0 -z 0 -Y -1.57079632679"/-->
+  <arg name="kapla" default="kapla"/>
+  <arg name="kapla_pose" default="-x 0 -y -0.3 -z 1.008"/>
+  
   <arg name="slower" default="false"/>
 
   <group if="$(arg slower)">
@@ -57,10 +60,17 @@
   <!-- <include file="$(find ur_gazebo)/launch/controller_utils.launch"/> -->
 
   <!-- Part -->
-  <group ns="part">
-    <node name="spawn_part" pkg="gazebo_ros" type="spawn_model"
+  <!-- group ns="part" -->
+    <!-- node name="spawn_part" pkg="gazebo_ros" type="spawn_model"
 	  args="-file $(find agimus_demos)/urdf/$(arg part).urdf -urdf
-		-model part $(arg part_pose)" />
+		-model part $(arg part_pose)" / -->
+  <!-- /group -->
+  
+    <!-- Kapla -->
+  <group ns="kapla">
+    <node name="spawn_part" pkg="gazebo_ros" type="spawn_model"
+	  args="-file $(find agimus_demos)/urdf/$(arg kapla).urdf -urdf
+		-model part $(arg kapla_pose)" />
   </group>
 
 </launch>

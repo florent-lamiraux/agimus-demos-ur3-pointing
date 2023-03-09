@@ -1,0 +1,19 @@
+demo:
+  robots:
+    ur3e:
+      srdf:
+        package: agimus_demos
+        file: srdf/ur3_robot.srdf
+  objects:
+    part:
+      class_name: Kapla
+      urdf:
+        package: agimus_demos
+        file: /ur3/pointing/urdf/kapla.urdf
+      srdf:
+        package: agimus_demos
+        file: ur3/pointing/srdf/kapla.srdf
+      contacts:
+        []
+  grippers:
+    [ur3e/gripper,]

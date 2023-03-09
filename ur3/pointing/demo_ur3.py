@@ -8,8 +8,7 @@ from hpp.gepetto import PathPlayer
 from hpp.gepetto.manipulation import ViewerFactory
 from tools_hpp import RosInterface, PathGenerator
 from utils import (
-    Pokeball,
-    PartPlaque,
+    Kapla,
 )
 
 # parse arguments
@@ -22,9 +21,6 @@ p.add_argument ('--context', type=str, metavar='context',
 args = p.parse_args ()
 
 joint_bounds = {}
-def setRobotJointBounds(which):
-    for jn, bound in jointBounds[which]:
-        robot.setJointBounds(jn, bound)
 
 try:
     import rospy
@@ -68,44 +64,9 @@ ps.selectPathValidation("Graph-Progressive", 0.01)
 
 #Viewer Factory
 vf = ViewerFactory(ps)
-vf.loadEnvironmentModel(Pokeball, "pokeball")
-robot.setJointBounds(
-        "pokeball/root_joint",
-        [
-                -0.4,
-                0.4,
-                -0.4,
-                0.4,
-                -0.1,
-                2.0,
-                -1.0001,
-                1.0001,
-                -1.0001,
-                1.0001,
-                -1.0001,
-                1.0001,
-                -1.0001,
-                1.0001],)
-
 ## Shrink joint bounds of UR-5
 #
-jointBounds = dict()
-jointBounds["default"] = [ (jn, robot.getJointBounds(jn)) \
-                           if not jn.startswith('ur3/') else
-                           (jn, [-pi, pi]) for jn in robot.jointNames]
-jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
-  ('ur3e/shoulder_lift_joint', [-pi, pi]),
-  ('ur3e/elbow_joint', [-3.1, 3.1]),
-  ('ur3e/wrist_1_joint', [-3.2, 3.2]),
-  ('ur3e/wrist_2_joint', [-3.2, 3.2]),
-  ('ur3e/wrist_3_joint', [-3.2, 3.2])]
-# Bounds to generate calibration configurations
-jointBounds["calibration"] = [('ur3e/shoulder_pan_joint', [-2.5, 2.5]),
-  ('ur3e/shoulder_lift_joint', [-2.5, 2.5]),
-  ('ur3e/elbow_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_1_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_2_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_3_joint', [-2.5, 2.5])]
+
 setRobotJointBounds("limited")
 
 ## Remove some collision pairs
@@ -113,8 +74,11 @@ setRobotJointBounds("limited")
 ur3JointNames = list(filter(lambda j: j.startswith("ur3/"), robot.jointNames))
 ur3LinkNames = [ robot.getLinkNames(j) for j in ur3JointNames ]
 
-# Get class_name str from rosparam
-Part_name = rospy.get_param('/demo/objects/part/class_name');
+########################################
+### Get class_name str from rosparam ###
+########################################
+Part_name = rospy.get_param('/demo/objects/part/class_name'); #Kapla
+
 # Instanciate the Part
 try:
     class_ = globals()[Part_name]
@@ -124,16 +88,15 @@ Part = class_()
 
 vf.loadRobotModel (Part, "part")
 
-# JESSY 07/12 change part/root_joint y: 1.5-> 1.75
+#Robot joint
 robot.setJointBounds('part/root_joint', [1, 1.75, -0.5, 0.5, -0.5, 0.5])
 print(f"{Part.__class__.__name__} loaded")
 
 robot.client.manipulation.robot.insertRobotSRDFModel\
     ("ur3e", "package://agimus_demos/srdf/ur3_robot.srdf")
 
-# VISUAL(modification pour voir le visual servoing sur Gazebo)
-# JESSY 07/12 change partPose[0]: 1.4 -> 1.6
-partPose = [1.6, 0.1, 0,0,0,-sqrt(2)/2,sqrt(2)/2]
+#Pose Kapla
+partPose = [0, -0.3, 1.008,0,0,-sqrt(2)/2,sqrt(2)/2]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()

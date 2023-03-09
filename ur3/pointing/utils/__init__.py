@@ -1,2 +1,2 @@
 from .norm import norm
-from .model import Pokeball, PartPlaque
+from .model import Kapla, PartPlaque
