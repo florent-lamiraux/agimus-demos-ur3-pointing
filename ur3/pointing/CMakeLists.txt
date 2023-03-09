@@ -46,6 +46,7 @@ INSTALL(FILES
 
 INSTALL(FILES
   urdf/plaque-tubes-with-table.urdf
+  urdf/pokeball.urdf
   urdf/robot.urdf.xacro
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
@@ -53,6 +54,7 @@ INSTALL(FILES
 INSTALL(FILES
   srdf/plaque-tubes.srdf
   srdf/plaque-tubes.py
+  srdf/pokeball.srdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
   )
 
@@ -60,6 +62,7 @@ INSTALL(FILES
   meshes/IMC.stl
   meshes/ur3e_d435_mount.stl
   meshes/ur3e_tip.stl
+  meshes/pokeball.osg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
 

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot name="pokeball">
+  <handle name="handle" clearance="0.025">
+    <position> 0 0 0 0.7071067811865476 0 0.7071067811865476 0 </position>
+    <link name="base_link"/>
+  </handle>
+  <contact name="bottom">
+    <link name="base_link"/>
+    <point>
+       0.01  0.01 -0.025
+      -0.01  0.01 -0.025
+      -0.01 -0.01 -0.025
+       0.01 -0.01 -0.025
+    </point>
+    <shape>
+      4 3 2 1 0
+    </shape>
+  </contact>
+</robot>

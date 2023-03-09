@@ -3,20 +3,14 @@ from math import pi, sqrt
 from hpp import Transform
 from hpp.corbaserver import loadServerPlugin
 from hpp.corbaserver.manipulation import Robot, \
-    createContext, newProblem, ProblemSolver, ConstraintGraph, \
-    ConstraintGraphFactory, Rule, Constraints, CorbaClient, SecurityMargins
+    createContext, newProblem, ProblemSolver, Rule, CorbaClient
 from hpp.gepetto import PathPlayer
 from hpp.gepetto.manipulation import ViewerFactory
 from tools_hpp import RosInterface, PathGenerator
-
-def norm(quaternion):
-    return sqrt(sum([e*e for e in quaternion]))
-
-#Plaque Model
-class PartPlaque:
-    urdfFilename = "package://agimus_demos/ur3/pointing/urdf/plaque-tubes-with-table.urdf"
-    srdfFilename = "package://agimus_demos/ur3/pointing/srdf/plaque-tubes.srdf"
-    rootJointType = "freeflyer"
+from utils import (
+    Pokeball,
+    PartPlaque,
+)
 
 # parse arguments
 defaultContext = "corbaserver"
@@ -62,9 +56,7 @@ ps = ProblemSolver(robot)
 ps.loadPlugin("manipulation-spline-gradient-based.so")
 ps.addPathOptimizer("EnforceTransitionSemantic")
 ps.addPathOptimizer("SimpleTimeParameterization")
-# ps.selectConfigurationShooter('Gaussian')
-# ps.setParameter('ConfigurationShooter/Gaussian/center', 12*[0.] + [1.])
-# ps.setParameter('ConfigurationShooter/Gaussian/standardDeviation', 0.25)
+
 ps.setParameter('SimpleTimeParameterization/order', 2)
 ps.setParameter('SimpleTimeParameterization/maxAcceleration', .5)
 ps.setParameter('SimpleTimeParameterization/safety', 0.95)
@@ -72,7 +64,28 @@ ps.setParameter('SimpleTimeParameterization/safety', 0.95)
 # Add path projector to avoid discontinuities
 ps.selectPathProjector ("Progressive", .05)
 ps.selectPathValidation("Graph-Progressive", 0.01)
+
+
+#Viewer Factory
 vf = ViewerFactory(ps)
+vf.loadEnvironmentModel(Pokeball, "pokeball")
+robot.setJointBounds(
+        "pokeball/root_joint",
+        [
+                -0.4,
+                0.4,
+                -0.4,
+                0.4,
+                -0.1,
+                2.0,
+                -1.0001,
+                1.0001,
+                -1.0001,
+                1.0001,
+                -1.0001,
+                1.0001,
+                -1.0001,
+                1.0001],)
 
 ## Shrink joint bounds of UR-5
 #
@@ -148,54 +161,16 @@ def createFreeRxConstraintForHandle(handle):
         (name, gripperJoint, handleJoint, M.toTuple(), jMh,
          [True, True, True, False, True, True])
 
-## Build constraint graph
-def createConstraintGraph():
-    all_handles = ps.getAvailable('handle')
-    part_handles = list(filter(lambda x: x.startswith("part/"), all_handles))
 
-    graph = ConstraintGraph(robot, 'graph2')
-    factory = ConstraintGraphFactory(graph)
-    factory.setGrippers(["ur3e/gripper",])
-    factory.setObjects(["part",], [part_handles], [[]])
-    factory.generate()
-    for handle in all_handles:
-        loopEdge = 'Loop | 0-{}'.format(factory.handles.index(handle))
-        graph.addConstraints(edge = loopEdge, constraints = Constraints
-            (numConstraints=['part/root_joint']))
+v = vf.createViewer()
+v(q0)
+pp = PathPlayer(v)
 
-    n = norm([-0.576, -0.002, 0.025, 0.817])
-    ps.createTransformationConstraint('look-at-part', 'part/base_link', 'ur3e/wrist_3_link',
-                                    [-0.126, -0.611, 1.209, -0.576/n, -0.002/n, 0.025/n, 0.817/n],
-                                    [True, True, True, True, True, True,])
-    graph.createNode(['look-at-part'])
-    graph.createEdge('free', 'look-at-part', 'go-look-at-part', 1, 'free')
-    graph.createEdge('look-at-part', 'free', 'stop-looking-at-part', 1, 'free')
-
-    graph.addConstraints(node='look-at-part',
-                        constraints = Constraints(numConstraints=['look-at-part']))
-    ps.createTransformationConstraint('placement/complement', '','part/base_link',
-                                    [0,0,0,0, 0, 0, 1],
-                                    [True, True, True, True, True, True,])
-    ps.setConstantRightHandSide('placement/complement', False)
-    graph.addConstraints(edge='go-look-at-part',
-                        constraints = Constraints(numConstraints=\
-                                                ['placement/complement']))
-    graph.addConstraints(edge='stop-looking-at-part',
-                        constraints = Constraints(numConstraints=\
-                                                ['placement/complement']))
-    sm = SecurityMargins(ps, factory, ["ur3e", "part"])
-    sm.setSecurityMarginBetween("ur3e", "part", 0.015)
-    sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
-    sm.defaultMargin = 0.01
-    sm.apply()
-    graph.initialize()
-    # Set weights of levelset edges to 0
-    for e in graph.edges.keys():
-        if e[-3:] == "_ls" and graph.getWeight(e) != -1:
-            graph.setWeight(e, 0)
-    return factory, graph
-
-factory, graph = createConstraintGraph()
+"""
+#############
+### Begin ###
+#############
+actory, graph = createConstraintGraph()
 
 try:
     v = vf.createViewer()
@@ -223,3 +198,4 @@ q2 = [-0.03687030473817998, 0.045090675354003906, -0.02318889299501592, -1.51153
 
 v(q_init)
 
+"""
