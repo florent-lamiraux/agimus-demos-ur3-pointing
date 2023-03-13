@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur3e" >
 
+    
   <material name="white02">
     <color rgba="1 1 1 0.2"/>
   </material>
@@ -38,7 +39,7 @@
   </xacro:if>
   <!-- import main macro -->
   <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
-
+  
   <!-- arm -->
   <xacro:ur_robot
       prefix=""
@@ -97,13 +98,13 @@
      <link name="walls">
       
      <!-- front wall -->
-     <visual>
-	<origin xyz="0.385 -0.305 0.37"/>
-        <geometry>
-	  <box size="0.03 1 0.74"/>
-        </geometry>
-	<material name="white02"/>
-     </visual>
+     <!-- visual -->
+	<!-- origin xyz="0.385 -0.305 0.37"/ -->
+        <!-- geometry -->
+	  <!-- box size="0.03 1 0.74"/ -->
+        <!-- /geometry -->
+	<!-- material name="white02"/ -->
+     <!-- /visual -->
       <collision>
        <origin xyz="0.385 -0.305 0.37"/>
        <geometry>
@@ -191,29 +192,39 @@
      <child link = "base_link" />
       <origin xyz="0.0 0.0 1" rpy="0.0 0.0 -1.5707963" />
    </joint>
+   
+    <link name="ee_gripper">
+      <visual>
+        <geometry>
+          <!-- The path to the visual meshes in the package. -->
+          <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.0008 0.0008 0.0008" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <!-- The path to the collision meshes in the package. -->
+          <mesh filename="package://agimus_demos/ur3/pointing/meshes/gripper_2f85_opened.stl" scale = "0.0008 0.0008 0.0008" />
+        </geometry>
+      </collision>
+    </link>
 
-   <link name="collision_cylinder">
-     <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-       <geometry>
-	 <cylinder radius="0.045" length="0.115"/>
-       </geometry>
-     </visual>
-     <collision>
-       <origin xyz="0 0 0" rpy="0 0 0"/>
-       <geometry>
-	 <cylinder radius="0.045" length="0.115"/>
-       </geometry>
-     </collision>
-   </link>
-
-   <joint name="collision_cylinder_joint" type="fixed">
-     <parent link="wrist_3_link" />
-     <child link = "collision_cylinder" />
-     <origin xyz="0.0 0.0 0.05" rpy="0.0 0.0 ${pi/2.0}" />
-   </joint>
-
-
+   
+    <joint name="ee_gripper_joint" type="fixed">
+      <!-- The parent link must be read from the robot model it is attached to. -->
+      <parent link="wrist_3_link"/>
+      <child link="ee_gripper"/>
+      <origin rpy="1.5708 0 0" xyz="0 0.075 0"/>
+    </joint>
+    
+   
+    <!-- TCP frame -->
+    <joint name="tcp_joint" type="fixed">
+      <origin xyz="0 0 0.116" rpy="0 0 0"/>
+      <parent link="ee_gripper"/>
+      <child link="tcp"/>
+    </joint>
+    <link name="tcp"/>
+    
    <link name="ref_camera_link">
    </link>
 

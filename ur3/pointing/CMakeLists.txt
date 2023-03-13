@@ -50,7 +50,8 @@ INSTALL(FILES
   urdf/pokeball.urdf
   urdf/kapla.urdf
   urdf/robot.urdf.xacro
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/urdf
+  urdf/gripper.xacro
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
 
 INSTALL(FILES
@@ -65,6 +66,8 @@ INSTALL(FILES
   meshes/IMC.stl
   meshes/ur3e_d435_mount.stl
   meshes/ur3e_tip.stl
+  meshes/gripper_2F85_closed.stl
+  meshes/gripper_2f85_opened.stl
   meshes/pokeball.osg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
