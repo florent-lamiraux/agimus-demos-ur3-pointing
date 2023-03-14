@@ -1,6 +1,6 @@
 <robot name="ur3e">
-  <gripper name="gripper" clearance="0.03">
-    <position xyz="0 0 -0.066" xyzw="0.0 -0.7071067811865475 0.0 0.7071067811865476"/>
+  <gripper name="GRIPPER" clearance="0.03">
+    <position xyz="0 0.12 0.075" xyzw="-0.5 -0.5 0.5 -0.5"/>
     <link name="ee_gripper"/>
 </gripper>
 
@@ -23,5 +23,15 @@
 		      link2="wrist_1_link" reason=""/>
   <disable_collisions link1="wrist_3_link"
 		      link2="ee_gripper" reason=""/>
+  <disable_collisions link1="ur3e/support_link"
+		      link2="kapla/base_link" reason=""/>		
+		      
+  <disable_collisions link1="wrist_1_link"
+		      link2="ee_gripper" reason=""/>
+  <disable_collisions link1="wrist_2_link"
+		      link2="ee_gripper" reason=""/>
+  <disable_collisions link1="wrist_3_link"
+		      link2="ee_gripper" reason=""/>      
+		      
 
 </robot>

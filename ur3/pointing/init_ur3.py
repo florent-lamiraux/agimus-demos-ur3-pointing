@@ -87,6 +87,7 @@ jointBounds["calibration"] = [('ur3e/shoulder_pan_joint', [-2.5, 2.5]),
   ('ur3e/wrist_1_joint', [-2.5, 2.5]),
   ('ur3e/wrist_2_joint', [-2.5, 2.5]),
   ('ur3e/wrist_3_joint', [-2.5, 2.5])]
+
 setRobotJointBounds("limited")
 
 ## Remove some collision pairs
@@ -121,7 +122,7 @@ robot.client.manipulation.robot.insertRobotSRDFModel\
 
 #Pose Kapla
 qw, qx, qy, qz = EulerToQuaternion(0,0,0)
-partPose = [0.2, -0.4, 1.009,qw,qx,qy,qz]
+partPose = [0.2, -0.5, 1.009,qx,qy,qz, qw]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
@@ -130,7 +131,7 @@ q0 = robot.getCurrentConfig()
 r = robot.rankInConfiguration['kapla/root_joint']
 q0[r:r+7] = partPose
 
-gripper = 'ur3e/gripper'
+gripper = 'ur3e/ee_gripper'
 ## Create specific constraint for a given handle
 #  Rotation is free along x axis.
 #  Note that locked part should be added to loop edge.

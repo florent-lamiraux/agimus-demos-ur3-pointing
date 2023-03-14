@@ -16,4 +16,4 @@ demo:
       contacts:
         []
   grippers:
-    [ur3e/gripper,]
+    [ur3e/GRIPPER]

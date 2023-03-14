@@ -2,10 +2,15 @@ from numpy import pi
 from hpp.corbaserver.manipulation import ConstraintGraph, ConstraintGraphFactory,  Constraints, SecurityMargins
 from utils import norm, EulerToQuaternion
 def createConstraintGraph(robot, ps):
-
+    # Return a list of available elements of type type handle
+    all_handles = ps.getAvailable('handle')
+    part_handles = list(filter(lambda x: x.startswith("kapla/"), all_handles))
+    
+    print(part_handles)
     graph = ConstraintGraph(robot, 'graph2')
     factory = ConstraintGraphFactory(graph)
-    factory.setGrippers(["ur3e/gripper",])
+    factory.setGrippers(["ur3e/GRIPPER",])
+    factory.setObjects(["kapla",], [part_handles], [[]])
     factory.generate()
 
     #Constraints
@@ -16,7 +21,7 @@ def createConstraintGraph(robot, ps):
             'grasp', 
             'ur3e/ee_gripper',
             'kapla/root_joint',
-            [0, 0.12, 0.075,qx,qy,qz,qw],
+            [0, 0.12, 0.075,-0.5,-0.5,0.5,-0.5],
             [True, True, True, True, True, True,],)
     
     #Kapla in horizontal plane with free rotation z
@@ -38,20 +43,20 @@ def createConstraintGraph(robot, ps):
             'pre-grasp', 
             'ur3e/ee_gripper',
             'kapla/root_joint',
-            [0, 0.18, 0.075,qx,qy,qz,qw],
+            [0, 0.18, 0.075,-0.5,-0.5,0.5,-0.5],
             [True, True, True, True, True, True,],)
      
     ps.createTransformationConstraint(
             'pre-grasp/complement', 
-            'ur3e/gripper',
+            'ur3e/ee_gripper',
             'kapla/root_joint',
-            [0, 0, 0, qx,qy,qz, qw],
+            [0, 0, 0,-0.5,-0.5,0.5,-0.5],
             [False, False, False, False, False, False,],)
     ps.createTransformationConstraint(
             'pre-release', 
             '',
             'kapla/root_joint',
-            [0, 0, 1.1009, 0,0,0,1],
+            [0, 0, 1.059, 0,0,0,1],
             [False, False, True, True, True, True,],)
 
     ps.setConstantRightHandSide("placement", True)
@@ -87,7 +92,7 @@ def createConstraintGraph(robot, ps):
     graph.addConstraints(edge='transit', constraints = Constraints(numConstraints=['placement/complement']))
     graph.addConstraints(edge='approach_kapla', constraints = Constraints(numConstraints=['placement/complement']))
     graph.addConstraints(edge='grasp_kapla', constraints = Constraints(numConstraints=['placement/complement','pre-grasp/complement']))
-    graph.addConstraints(edge='take_kapla_up', constraints = Constraints(numConstraints=['placement/complement','grasp']))
+    graph.addConstraints(edge='take_kapla_up', constraints = Constraints(numConstraints=['pre-grasp/complement','grasp', 'placement/complement']))
     graph.addConstraints(edge='take_kapla_away', constraints = Constraints(numConstraints=['grasp']))
     graph.addConstraints(edge='transfer', constraints = Constraints(numConstraints=['grasp']))
     graph.addConstraints(edge='approach_ground', constraints = Constraints(numConstraints=['grasp']))
@@ -98,8 +103,9 @@ def createConstraintGraph(robot, ps):
     #Security Margin
     sm = SecurityMargins(ps, factory, ["ur3e", "kapla"])
     sm.setSecurityMarginBetween("ur3e", "ur3e", 0)
-    sm.defaultMargin = 0.01
+    sm.defaultMargin = 0
     sm.apply()
+
     graph.initialize()
     
     # Set weights of levelset edges to 0
