@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <robot name="kapla">
-  <handle name="handle" clearance="0.025">
-    <position> 0 0 0 0.7071067811865476 0 0.7071067811865476 0 </position>
+  <handle name="handle" clearance="0.008">
+    <position xyz= "0 0 0" xyzw="0 0 0 1" />
     <link name="base_link"/>
   </handle>
   <contact name="bottom">
     <link name="base_link"/>
     <point>
-       0.01  0.01 -0.025
-      -0.01  0.01 -0.025
-      -0.01 -0.01 -0.025
-       0.01 -0.01 -0.025
+       0.035  0.008 -0.008
+      -0.035  0.008 -0.008
+      -0.035 -0.008 -0.008
+       0.035 -0.008 -0.008
     </point>
     <shape>
-      4 3 2 1 0
+      4 0 1 2 3
     </shape>
   </contact>
 </robot>

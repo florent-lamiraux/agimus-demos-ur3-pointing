@@ -39,36 +39,25 @@ INSTALL_DEMO_LAUNCH_FILES(ur3 pointing
 
 INSTALL(FILES
   supervisor.py
-  demo-plaque-tubes-with-table.yaml
-  demo-april-tag-plank.yaml
   demo-kapla.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing
   )
 
 INSTALL(FILES
-  urdf/plaque-tubes-with-table.urdf
-  urdf/pokeball.urdf
   urdf/kapla.urdf
   urdf/robot.urdf.xacro
-  urdf/gripper.xacro
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/urdf
   )
 
 INSTALL(FILES
-  srdf/plaque-tubes.srdf
-  srdf/plaque-tubes.py
-  srdf/pokeball.srdf
   srdf/kapla.srdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
   )
 
 INSTALL(FILES
   meshes/IMC.stl
-  meshes/ur3e_d435_mount.stl
-  meshes/ur3e_tip.stl
   meshes/gripper_2F85_closed.stl
   meshes/gripper_2f85_opened.stl
-  meshes/pokeball.osg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/meshes
   )
 

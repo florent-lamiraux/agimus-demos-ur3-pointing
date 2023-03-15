@@ -100,7 +100,7 @@ ur3LinkNames = [ robot.getLinkNames(j) for j in ur3JointNames ]
 ############
 
 #Get class_name str from rosparam
-Part_name = rospy.get_param('/demo/objects/part/class_name'); #Kapla
+Part_name = rospy.get_param('/demo/objects/kapla/class_name'); #Kapla
 
 # Instanciate the Part
 try:
@@ -122,7 +122,7 @@ robot.client.manipulation.robot.insertRobotSRDFModel\
 
 #Pose Kapla
 qw, qx, qy, qz = EulerToQuaternion(0,0,0)
-partPose = [0.2, -0.5, 1.009,qx,qy,qz, qw]
+partPose = [0.1, -0.4, 1.009,qx,qy,qz, qw]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
@@ -159,36 +159,3 @@ ri = None
 ri = RosInterface(robot)
 q_init = ri.getCurrentConfig(q0)
 
-"""
-#############
-### Begin ###
-#############
-actory, graph = createConstraintGraph()
-
-try:
-    v = vf.createViewer()
-    v(q0)
-    pp = PathPlayer(v)
-except:
-    print("Did you launch the GUI?")
-
-
-
-
-
-ri = None
-ri = RosInterface(robot)
-q_init = ri.getCurrentConfig(q0)
-
-pg = PathGenerator(ps, graph, ri, v, q_init)
-pg.inStatePlanner.setEdge('Loop | f')
-pg.testGraph()
-
-
-##DEMO
-q1 = [-0.3264229933368128, -0.7798698584185999, -1.5035503546344202, -0.044666592274801076, -0.06998950639833623, 0.49361300468444824, 1.6, 0.1, 0, 0, 0, -0.7071067811865476, 0.7071067811865476]
-q2 = [-0.03687030473817998, 0.045090675354003906, -0.02318889299501592, -1.5115330854998987, -0.0035083929644983414, 1.5308219194412231, 1.6, 0.1, 0, 0, 0, -0.7071067811865476, 0.7071067811865476]
-
-v(q_init)
-
-"""

@@ -5,7 +5,7 @@ demo:
         package: agimus_demos
         file: srdf/ur3_robot.srdf
   objects:
-    part:
+    kapla:
       class_name: Kapla
       urdf:
         package: agimus_demos
