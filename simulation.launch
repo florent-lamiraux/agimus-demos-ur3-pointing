@@ -60,8 +60,8 @@
   <!-- Kapla -->
   <group ns="kapla">
     <node name="spawn_part" pkg="gazebo_ros" type="spawn_model"
-	  args="-file $(find agimus_demos)/urdf/$(arg kapla).urdf -urdf
-		-model part $(arg kapla_pose)" />
+	  args="-file $(find agimus_demos)/ur3/pointing/urdf/$(arg kapla).urdf
+                -urdf -model part $(arg kapla_pose)" />
   </group>
 
 </launch>
