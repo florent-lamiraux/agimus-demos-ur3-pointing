@@ -8,6 +8,21 @@
       <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
     </plugin>
   </gazebo>
+  
+    
+  <!-- Gazebo grasping plugin -->
+  <gazebo>
+    <gripper name="gazebo_gripper">
+      <grasp_check>
+        <attach_steps>2</attach_steps>    <!-- default: 20 -->
+        <detach_steps>2</detach_steps>    <!-- default: 40 -->
+        <min_contact_count>3</min_contact_count>
+      </grasp_check>
+      <gripper_link>robotiq_85_left_finger_tip_link</gripper_link>
+      <gripper_link>robotiq_85_right_finger_tip_link</gripper_link>
+      <palm_link>robotiq_85_base_link</palm_link>
+    </gripper>
+  </gazebo>
 
   <xacro:include filename="$(find agimus_demos)/urdf/_d435.gazebo.xacro"/>
   <xacro:gazebo_d435 camera_name="d435" reference_link="ref_camera_link"

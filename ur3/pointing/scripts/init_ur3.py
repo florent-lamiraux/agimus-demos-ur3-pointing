@@ -71,22 +71,12 @@ vf = ViewerFactory(ps)
 ## Shrink joint bounds of UR-5
 #
 jointBounds = dict()
-jointBounds["default"] = [ (jn, robot.getJointBounds(jn)) \
-                           if not jn.startswith('ur3/') else
-                           (jn, [-pi, pi]) for jn in robot.jointNames]
 jointBounds["limited"] = [('ur3e/shoulder_pan_joint', [-pi, pi]),
   ('ur3e/shoulder_lift_joint', [-pi, pi]),
   ('ur3e/elbow_joint', [-3.1, 3.1]),
   ('ur3e/wrist_1_joint', [-3.2, 3.2]),
   ('ur3e/wrist_2_joint', [-3.2, 3.2]),
   ('ur3e/wrist_3_joint', [-3.2, 3.2])]
-# Bounds to generate calibration configurations
-jointBounds["calibration"] = [('ur3e/shoulder_pan_joint', [-2.5, 2.5]),
-  ('ur3e/shoulder_lift_joint', [-2.5, 2.5]),
-  ('ur3e/elbow_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_1_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_2_joint', [-2.5, 2.5]),
-  ('ur3e/wrist_3_joint', [-2.5, 2.5])]
 
 setRobotJointBounds("limited")
 
@@ -111,7 +101,7 @@ Part = class_()
 
 vf.loadRobotModel (Part, "kapla")
 
-#Robot joint
+#Kapla joint
 robot.setJointBounds('kapla/root_joint', [-0.388, 0.372,
                                           -0.795, 0.135, 
                                            1.008, 1.7392])
@@ -126,35 +116,12 @@ partPose = [0.1, -0.4, 1.009,qx,qy,qz, qw]
 
 ## Define initial configuration
 q0 = robot.getCurrentConfig()
-# set the joint match with real robot
-#0[:6] = [0, -pi/2, 0.89*pi,-pi/2, -pi, 0.5]
 r = robot.rankInConfiguration['kapla/root_joint']
 q0[r:r+7] = partPose
 
-gripper = 'ur3e/ee_gripper'
-## Create specific constraint for a given handle
-#  Rotation is free along x axis.
-#  Note that locked part should be added to loop edge.
-def createFreeRxConstraintForHandle(handle):
-    name = gripper + ' grasps ' + handle
-    handleJoint, jMh = robot.getHandlePositionInJoint(handle)
-    gripperJoint, jMg = robot.getGripperPositionInJoint(gripper)
-    ps.client.basic.problem.createTransformationConstraint2\
-        (name, gripperJoint, handleJoint, jMg, jMh,
-         [True, True, True, False, True, True])
-    # pregrasp
-    shift = 0.13
-    M = Transform(jMg)*Transform([shift,0,0,0,0,0,1])
-    name = gripper + ' pregrasps ' + handle
-    ps.client.basic.problem.createTransformationConstraint2\
-        (name, gripperJoint, handleJoint, M.toTuple(), jMh,
-         [True, True, True, False, True, True])
-
-
+#Init
 v = vf.createViewer()
-v(q0)
 pp = PathPlayer(v)
-
 ri = None
 ri = RosInterface(robot)
 q_init = ri.getCurrentConfig(q0)
