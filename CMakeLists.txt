@@ -57,6 +57,7 @@ INSTALL(FILES
   
 INSTALL(FILES
   srdf/kapla.srdf
+  srdf/ur3_robot.srdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ur3/pointing/srdf
   )
 
